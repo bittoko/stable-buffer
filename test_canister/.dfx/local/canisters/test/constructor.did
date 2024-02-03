@@ -1,0 +1,16 @@
+type Return = 
+ variant {
+   err: Error;
+   ok: nat;
+ };
+type Error = 
+ variant {
+   insufficient_memory;
+   out_of_bounds;
+   size_error: text;
+ };
+service : {
+  append: (blob) -> (Return);
+  get: (nat) -> (blob) query;
+  getCapacity: () -> (nat64) query;
+}
