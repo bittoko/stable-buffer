@@ -18,9 +18,10 @@ module {
     let stable_array : T.State = {
       var next = 0;
       var capacity = initial_capacity;
-      elements_per_page = block_count;
-      element_size = params.size;
-      elements = memory_region
+      blocks_per_page = block_count;
+      page_buffer = C.PAGE_SIZE % params.size;
+      block_size = params.size;
+      blocks = memory_region
     };
     stable_array
   };

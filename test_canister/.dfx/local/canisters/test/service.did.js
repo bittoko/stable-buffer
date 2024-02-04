@@ -6,9 +6,10 @@ export const idlFactory = ({ IDL }) => {
   });
   const Return = IDL.Variant({ 'ok' : IDL.Nat, 'err' : Error });
   return IDL.Service({
-    'append' : IDL.Func([IDL.Vec(IDL.Nat8)], [Return], []),
+    'append' : IDL.Func([], [Return], []),
+    'capacity' : IDL.Func([], [IDL.Nat], ['query']),
     'get' : IDL.Func([IDL.Nat], [IDL.Vec(IDL.Nat8)], ['query']),
-    'getCapacity' : IDL.Func([], [IDL.Nat64], ['query']),
+    'vals' : IDL.Func([], [IDL.Vec(IDL.Vec(IDL.Nat8))], ['query']),
   });
 };
 export const init = ({ IDL }) => { return []; };

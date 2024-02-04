@@ -1,15 +1,32 @@
 import SB "../../src";
+import { range; toArray } "mo:base/Iter";
+import Array "mo:base/Array";
+import Blob "mo:base/Blob";
 
 actor {
 
-  let state = SB.State.init({size=3; capacity=1000});
+  stable let state = SB.State.init({size=122; capacity=1000});
   
   let buffer = SB.StableBuffer( state );
 
-  public query func getCapacity(): async Nat64 { state.capacity };
+  public query func capacity(): async Nat { buffer.capacity() };
 
-  public func append(b: Blob): async SB.Return<Nat> { buffer.append(b) };
+  public query func vals(): async [Blob] { toArray<Blob>( buffer.vals() ) };
 
   public query func get(i: Nat): async Blob { buffer.get(i) };
+
+  public func add(): async SB.Return<Nat> {
+    var byte : Nat8 = 0x00;
+    let capacity : Nat = buffer.capacity();
+    for ( inc in range(0, capacity) ) {
+      if ( byte < 255 ) byte += 1;
+      let blob : Blob = Blob.fromArray( Array.tabulate<Nat8>(122, func(_)=byte) );
+      switch( buffer.add(blob) ){
+        case( #err msg ) return #err(msg);
+        case( #ok _ ) ()
+      };
+    };
+    #ok(0)
+  };
 
 };

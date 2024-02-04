@@ -10,7 +10,8 @@ type Error =
    size_error: text;
  };
 service : {
-  append: (blob) -> (Return);
+  append: () -> (Return);
+  capacity: () -> (nat) query;
   get: (nat) -> (blob) query;
-  getCapacity: () -> (nat64) query;
+  vals: () -> (vec blob);
 }

@@ -19,9 +19,10 @@ module {
   public type State = {
     var next : Nat64;
     var capacity: Nat64;
-    elements_per_page : Nat64;
-    element_size : Nat64;
-    elements : Region;
+    blocks_per_page : Nat64;
+    page_buffer : Nat64;
+    block_size : Nat64;
+    blocks : Region;
   };
 
 }

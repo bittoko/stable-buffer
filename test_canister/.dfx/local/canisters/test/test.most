@@ -1,4 +1,15 @@
 // Version: 1.0.0
+type Region__1 = Region;
+type Region__2 = Region__1;
+type Region__3 = Region__2;
 actor {
-  
+  stable state :
+    {
+      block_size : Nat64;
+      blocks : Region__3;
+      blocks_per_page : Nat64;
+      var capacity : Nat64;
+      var next : Nat64;
+      page_buffer : Nat64
+    }
 };

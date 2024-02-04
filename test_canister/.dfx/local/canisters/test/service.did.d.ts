@@ -7,7 +7,8 @@ export type Error = { 'out_of_bounds' : null } |
 export type Return = { 'ok' : bigint } |
   { 'err' : Error };
 export interface _SERVICE {
-  'append' : ActorMethod<[Uint8Array | number[]], Return>,
+  'append' : ActorMethod<[], Return>,
+  'capacity' : ActorMethod<[], bigint>,
   'get' : ActorMethod<[bigint], Uint8Array | number[]>,
-  'getCapacity' : ActorMethod<[], bigint>,
+  'vals' : ActorMethod<[], Array<Uint8Array | number[]>>,
 }
