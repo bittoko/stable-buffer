@@ -1,4 +1,4 @@
-# stable-array
+# stable-buffer
 
 ```
 import SB "../../src";
