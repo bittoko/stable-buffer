@@ -24,21 +24,21 @@ module {
 
     public func capacity(): Nat = nat64ToNat( state.capacity );
 
-    public func get(i: Nat): Blob {
+    public func get(i: Nat): T.Block {
       let index : Nat64 = nat64FromNat( i );
       let offset : Nat64 = get_offset(index, state.blocks_per_page, state.page_buffer, state.block_size);
-      if ( index >= state.next ) trap("mo:stable-buffer/class: line 15");
+      if ( index >= state.next ) trap("mo:stable-buffer/class: line 30");
       Region.loadBlob(state.blocks, offset, nat64ToNat(state.block_size))
     };
 
-    public func getOpt(i: Nat): ?Blob {
+    public func getOpt(i: Nat): ?T.Block {
       let index : Nat64 = nat64FromNat( i );
       if ( index >= state.next ) return null;
       let offset : Nat64 = get_offset(index, state.blocks_per_page, state.page_buffer, state.block_size);
       ?Region.loadBlob(state.blocks, offset, nat64ToNat(state.block_size))
     };
 
-    public func set(i: Nat, b: Blob): T.Return<Blob> {
+    public func set(i: Nat, b: T.Block): T.Return<Blob> {
       let index : Nat64 = nat64FromNat( i );
       let size : Nat = nat64ToNat( state.block_size);
       if ( index >= state.next ) return #err(#out_of_bounds);
@@ -49,11 +49,10 @@ module {
       #ok(old_block)
     };
 
-    public func add(b: Blob): T.Return<Nat> {
+    public func add(b: T.Block): T.Return<Nat> {
       let offset : Nat64 = get_offset(state.next, state.blocks_per_page, state.page_buffer, state.block_size);
       if ( state.next >= state.capacity ){
         if( Region.grow(state.blocks, 1) == C.MEMORY_EXHAUSTED ) return #err(#insufficient_memory);
-        Region.storeBlob(state.blocks, offset, blobFromArray(tabulate<Nat8>(nat64ToNat(C.PAGE_SIZE), func(_)=0xFF)));
         state.capacity += state.blocks_per_page;
       };
       Region.storeBlob(state.blocks, offset, b);
@@ -62,14 +61,14 @@ module {
       #ok( index )
     };
 
-    public func vals() : { next: () -> ?Blob } = object {
+    public func vals() : { next: () -> ?T.Block } = object {
       var pointer : Nat64 = 0;
       let bound: Nat64 = state.next;
       let bs : Nat64 = state.block_size;
       let pb : Nat64 = state.page_buffer;
       let memory: T.Region = state.blocks;
       let bpp : Nat64 = state.blocks_per_page;
-      public func next(): ?Blob {
+      public func next(): ?T.Block {
         if ( pointer >= bound ) return null
         else {
           let offset : Nat64 = get_offset(pointer, bpp, pb, bs);

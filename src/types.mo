@@ -2,18 +2,22 @@ import Region "mo:base/Region";
 
 module {
 
+  public type Block = Blob;
+
   public type Region = Region.Region;
 
   public type Return<T> = { #ok: T; #err: Error };
 
-  public type Error = { #insufficient_memory; #size_error: Text; #out_of_bounds };
+  public type Error = { #insufficient_memory; #out_of_bounds; #size_error: Text };
 
   public type StableBuffer = {
     size : () -> Nat;
-    get : (Nat) -> Blob;
-    getOpt : (Nat) -> ?Blob;
-    set : (Nat, Blob) -> Return<()>;
-    append : (Blob) -> Return<Nat>;
+    capacity : () -> Nat;
+    get : (Nat) -> Block;
+    getOpt : (Nat) -> ?Block;
+    vals : () -> { next: () -> ?Block };
+    set : (Nat, Block) -> Return<Block>;
+    add : (Block) -> Return<Nat>;
   };
 
   public type State = {

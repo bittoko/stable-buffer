@@ -1,8 +1,8 @@
 [package]
 name = "stable-buffer"
-version = "1.0.0"
+version = "1.0.1"
 description = "Buffers implemented in stable memory regions"
-repository = "\u0016https://github.com/bittoko/stable-buffer"
+repository = "https://github.com/bittoko/stable-buffer"
 keywords = [ "buffer", "array", "stable", "memory", "region" ]
 license = "MIT"
 
